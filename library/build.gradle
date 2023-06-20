@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 31
@@ -30,8 +30,39 @@ android {
         exclude 'META-INF/MANIFEST.MF'
     }
 }
+group = 'com.duorong'
+version = '2.6.2'
 
+publishing {
+    publications {
+        mavenAar(MavenPublication) {
+            afterEvaluate {
+                groupId = 'com.duorong'
+                artifactId = 'SVGAPlayer-Android'
+                version = '2.6.2'
+                // 指定发布的构件
+                from components.release
+            }
 
+        }
+    }
+
+    repositories {
+        maven {
+            allowInsecureProtocol = true
+            url = uri('http://mvn.shiguangxu.com/repository/android/')
+            credentials {
+                username = ''
+                password = ''
+            }
+        }
+    }
+}
+task comps {
+    afterEvaluate {
+        println("Components: " + components*.name)
+    }
+}
 dependencies {
     implementation 'com.squareup.wire:wire-runtime:4.4.1'
 }
